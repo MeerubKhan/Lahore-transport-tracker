@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lahore Transport Tracker</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #0f0f0f;
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 6px;
+            color: #ffffff;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: #888;
+            margin-bottom: 36px;
+        }
+
+        .search-box {
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 16px;
+            padding: 28px;
+            width: 100%;
+            max-width: 500px;
+            margin-bottom: 32px;
+        }
+
+        .input-group {
+            margin-bottom: 16px;
+        }
+
+        label {
+            display: block;
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 16px;
+            background: #0f0f0f;
+            border: 1px solid #2a2a2a;
+            border-radius: 10px;
+            color: #ffffff;
+            font-size: 15px;
+            outline: none;
+            transition: border 0.2s;
+        }
+
+        input:focus { border-color: #555; }
+
+        button {
+            width: 100%;
+            padding: 13px;
+            background: #ffffff;
+            color: #000000;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: opacity 0.2s;
+        }
+
+        button:hover { opacity: 0.85; }
+
+        .results-title {
+            font-size: 14px;
+            color: #888;
+            margin-bottom: 16px;
+            align-self: flex-start;
+            max-width: 700px;
+            width: 100%;
+        }
+
+        .results-title span { color: #fff; font-weight: 500; }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            width: 100%;
+            max-width: 700px;
+        }
+
+        .card {
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 14px;
+            padding: 20px;
+            transition: border 0.2s;
+        }
+
+        .card:hover { border-color: #444; }
+
+        .card-name {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 14px;
+            color: #fff;
+        }
+
+        .card-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .card-row .label { color: #666; }
+        .card-row .value { color: #fff; font-weight: 500; }
+
+        .comfort-low    { color: #f87171; }
+        .comfort-medium { color: #fbbf24; }
+        .comfort-high   { color: #34d399; }
+    </style>
+</head>
+<body>
+
+    <h1>🛺 Lahore Transport Tracker</h1>
+    <p class="subtitle">Compare rickshaw, Yango, indrive & metro instantly</p>
+
+    <div class="search-box">
+        <form method="POST">
+            <div class="input-group">
+                <label>You are at</label>
+                <input type="text" name="start"
+                       placeholder="e.g. Gulberg, Lahore"
+                       value="{{ start }}" required>
+            </div>
+            <div class="input-group">
+                <label>You want to go to</label>
+                <input type="text" name="destination"
+                       placeholder="e.g. DHA Phase 5"
+                       value="{{ destination }}" required>
+            </div>
+            <button type="submit">Compare Transport →</button>
+        </form>
+    </div>
+
+    {%if results%}
+    <p class="results-title">
+        Distance and Time from <span>{{ start }}</span> to <span>{{ destination }}</span>
+        : <span>{{ distance }} km</span> - <span>{{ duration }} min</span>
+    <div class="cards">
+        {% for name, info in results.items() %}
+        <div class="card">
+            <p class="card-name">{{ name }}</p>
+            <div class="card-row">
+                <span class="label">Price</span>
+                <span class="value">{{ info.price }}</span>
+            </div>
+            <div class="card-row">
+                <span class="label">Time</span>
+                <span class="value">{{ info.time }}</span>
+            </div>
+            <div class="card-row">
+                <span class="label">Comfort</span>
+                <span class="value comfort-{{ info.comfort | lower }}">{{ info.comfort }}</span>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if error %}
+    <p style="color:#f87171; text-align:center;">⚠️ {{ error }}</p>
+    {% endif %}
+   
+</body>
+</html>
