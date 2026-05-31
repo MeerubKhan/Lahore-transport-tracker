@@ -11,6 +11,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 API_KEY = os.getenv("ORS_API_KEY")
+print("API KEY LOADED:", bool(API_KEY))
 
 app=Flask(__name__)
 
