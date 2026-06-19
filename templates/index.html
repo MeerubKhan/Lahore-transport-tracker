@@ -182,6 +182,12 @@
     </div>
     {% endif %}
 
+    {% if route_map %}
+    <div style="margin-top: 20px; width: 60%; max-width: 900px;">
+    {{ route_map | safe }}
+    </div>
+    {% endif %}
+    
     {% if error %}
     <p style="color:#f87171; text-align:center;">⚠️ {{ error }}</p>
     {% endif %}
